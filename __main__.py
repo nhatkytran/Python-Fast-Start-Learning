@@ -11,34 +11,26 @@ links = {
     'facebook': 'https://www.facebook.com/',
     'facebook_mike': 'https://www.facebook.com/profile.php?id=100018031596666'
 }
+site_names = ('u', 'udemy', 'y', 'youtube', 'g',
+              'github', 'g1', 'gmail1', 'g2', 'gmail2', 'g3', 'gmail3', 'f', 'facebook', 'fm', 'facebook_mike')
+
+
+def add_argument_helper(short, long):
+    parser.add_argument(f'-{short}', f'--{long}',
+                        action='store_const', const=f'{long}')
+
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-u', '--udemy', action='store_const', const='udemy')
-parser.add_argument('-y', '--youtube', action='store_const', const='youtube')
-parser.add_argument('-g', '--github', action='store_const', const='github')
-parser.add_argument('-g1', '--gmail1', action='store_const', const='gmail1')
-parser.add_argument('-g2', '--gmail2', action='store_const', const='gmail2')
-parser.add_argument('-g3', '--gmail3', action='store_const', const='gmail3')
-parser.add_argument('-f', '--facebook', action='store_const', const='facebook')
-parser.add_argument('-fm', '--facebook_mike',
-                    action='store_const', const='facebook_mike')
+for i in range(0, len(site_names), 2):
+    add_argument_helper(site_names[i], site_names[i + 1])
 
 args = parser.parse_args()
 
-if args.udemy:
-    webbrowser.open_new_tab(links[args.udemy])
-if args.youtube:
-    webbrowser.open_new_tab(links[args.youtube])
-if args.github:
-    webbrowser.open_new_tab(links[args.github])
-if args.gmail1:
-    webbrowser.open_new_tab(links[args.gmail1])
-if args.gmail2:
-    webbrowser.open_new_tab(links[args.gmail2])
-if args.gmail3:
-    webbrowser.open_new_tab(links[args.gmail3])
-if args.facebook:
-    webbrowser.open_new_tab(links[args.facebook])
-if args.facebook_mike:
-    webbrowser.open_new_tab(links[args.facebook_mike])
+
+site_namespace = args.__dict__
+site_namespace_keys = site_namespace.keys()
+
+for key in site_namespace_keys:
+    if site_namespace[key] is not None:
+        webbrowser.open_new_tab(links[site_namespace[key]])
