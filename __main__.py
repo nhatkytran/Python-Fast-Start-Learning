@@ -1,5 +1,18 @@
 import argparse
 import webbrowser
+import requests
+
+r = requests.get(
+    'https://nhatkytran-serverless-learning.netlify.app/api/airtable')
+
+data = r.json()
+
+
+def load_mike_images():
+    for item in data:
+        image_url = item['image']
+        webbrowser.open_new_tab(image_url)
+
 
 links = {
     'udemy': 'https://www.udemy.com/',
@@ -10,7 +23,7 @@ links = {
     'gmail3': 'https://mail.google.com/mail/u/3/#inbox',
     'facebook': 'https://www.facebook.com/',
     'facebook_mike': 'https://www.facebook.com/profile.php?id=100018031596666',
-    'facebook_mike_avatar': 'https://scontent.fsgn17-1.fna.fbcdn.net/v/t39.30808-1/296869480_1088823018395408_1339029068878044395_n.jpg?stp=dst-jpg_p480x480&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_ohc=PYjri-4sgIgAX9Q0MYF&_nc_oc=AQm9TJEnt-BMLyz0zUTXTZ39d8YWpr5ZMxcTexhJFK9rnn_WaOlyow5KTuvtKpt0AuljGiQm2Uh_RW6DiHhdul0a&_nc_ht=scontent.fsgn17-1.fna&oh=00_AT-sVQ-yggHksJzYj-6xxv9uHmHOtoqdEAhuJw8qC_vjzw&oe=62EC33C3'
+    'facebook_mike_avatar': ''
 }
 
 site_names = ('u', 'udemy', 'y', 'youtube', 'g',
@@ -34,5 +47,7 @@ site_namespace = args.__dict__
 site_namespace_keys = site_namespace.keys()
 
 for key in site_namespace_keys:
-    if site_namespace[key] is not None:
+    if site_namespace[key] == 'facebook_mike_avatar':
+        load_mike_images()
+    elif site_namespace[key] is not None:
         webbrowser.open_new_tab(links[site_namespace[key]])
